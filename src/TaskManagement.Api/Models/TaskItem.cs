@@ -19,10 +19,14 @@ public class TaskItem
     [Required]
     public string Priority { get; set; } = "Medium";
 
-    public string? Category { get; set; }
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
 
     [Required]
     public string OwnerId { get; set; } = string.Empty;
 
     public AppUser? Owner { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

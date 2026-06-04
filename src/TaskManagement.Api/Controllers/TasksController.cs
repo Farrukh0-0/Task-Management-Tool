@@ -25,7 +25,7 @@ public class TasksController : ControllerBase
         var isAdmin = User.IsInRole("Admin");
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var query = _dbContext.Tasks.Include(t => t.Owner).AsQueryable();
+        var query = _dbContext.Tasks.Include(t => t.Owner).Include(t => t.Category).AsQueryable();
         if (!isAdmin)
         {
             query = query.Where(t => t.OwnerId == currentUserId);
@@ -38,7 +38,7 @@ public class TasksController : ControllerBase
             t.DueDate,
             t.IsComplete,
             t.Priority,
-            t.Category,
+            t.Category != null ? t.Category.Name : null,
             t.OwnerId,
             t.Owner!.Email)).ToListAsync();
 
@@ -49,7 +49,7 @@ public class TasksController : ControllerBase
     public async Task<IActionResult> GetTask(int id)
     {
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var task = await _dbContext.Tasks.Include(t => t.Owner).FirstOrDefaultAsync(t => t.Id == id);
+        var task = await _dbContext.Tasks.Include(t => t.Owner).Include(t => t.Category).FirstOrDefaultAsync(t => t.Id == id);
         if (task is null)
         {
             return NotFound();
@@ -67,7 +67,7 @@ public class TasksController : ControllerBase
             task.DueDate,
             task.IsComplete,
             task.Priority,
-            task.Category,
+            task.Category != null ? task.Category.Name : null,
             task.OwnerId,
             task.Owner?.Email));
     }
@@ -86,9 +86,20 @@ public class TasksController : ControllerBase
             DueDate = request.DueDate,
             IsComplete = request.IsComplete,
             Priority = request.Priority,
-            Category = request.Category,
             OwnerId = ownerId
         };
+
+        if (!string.IsNullOrWhiteSpace(request.Category))
+        {
+            var existingCategory = await _dbContext.Categories.FirstOrDefaultAsync(c => c.Name == request.Category);
+            if (existingCategory is null)
+            {
+                existingCategory = new Category { Name = request.Category };
+                _dbContext.Categories.Add(existingCategory);
+            }
+
+            task.Category = existingCategory;
+        }
 
         _dbContext.Tasks.Add(task);
         await _dbContext.SaveChangesAsync();
@@ -102,7 +113,7 @@ public class TasksController : ControllerBase
             task.DueDate,
             task.IsComplete,
             task.Priority,
-            task.Category,
+            task.Category != null ? task.Category.Name : null,
             task.OwnerId,
             task.Owner?.Email));
     }
@@ -128,7 +139,23 @@ public class TasksController : ControllerBase
         task.DueDate = request.DueDate;
         task.IsComplete = request.IsComplete;
         task.Priority = request.Priority;
-        task.Category = request.Category;
+
+        if (!string.IsNullOrWhiteSpace(request.Category))
+        {
+            var existingCategory = await _dbContext.Categories.FirstOrDefaultAsync(c => c.Name == request.Category);
+            if (existingCategory is null)
+            {
+                existingCategory = new Category { Name = request.Category };
+                _dbContext.Categories.Add(existingCategory);
+            }
+
+            task.Category = existingCategory;
+        }
+        else
+        {
+            task.Category = null;
+            task.CategoryId = null;
+        }
 
         if (isAdmin && !string.IsNullOrEmpty(request.OwnerId))
         {

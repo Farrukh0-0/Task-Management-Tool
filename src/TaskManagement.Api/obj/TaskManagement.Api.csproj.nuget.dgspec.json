@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj": {}
+    "d:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj": {}
   },
   "projects": {
-    "D:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj": {
+    "d:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj",
+        "projectUniqueName": "d:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj",
         "projectName": "TaskManagement.Api",
-        "projectPath": "D:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj",
+        "projectPath": "d:\\Task Management Tool\\src\\TaskManagement.Api\\TaskManagement.Api.csproj",
         "packagesPath": "C:\\Users\\Iqbal\\.nuget\\packages\\",
-        "outputPath": "D:\\Task Management Tool\\src\\TaskManagement.Api\\obj\\",
+        "outputPath": "d:\\Task Management Tool\\src\\TaskManagement.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Iqbal\\AppData\\Roaming\\NuGet\\NuGet.Config",

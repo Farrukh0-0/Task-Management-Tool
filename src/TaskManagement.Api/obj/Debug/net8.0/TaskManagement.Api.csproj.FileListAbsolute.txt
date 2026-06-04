@@ -142,3 +142,4 @@ D:\Task Management Tool\src\TaskManagement.Api\obj\Debug\net8.0\refint\TaskManag
 D:\Task Management Tool\src\TaskManagement.Api\obj\Debug\net8.0\TaskManagement.Api.pdb
 D:\Task Management Tool\src\TaskManagement.Api\obj\Debug\net8.0\TaskManagement.Api.genruntimeconfig.cache
 D:\Task Management Tool\src\TaskManagement.Api\obj\Debug\net8.0\ref\TaskManagement.Api.dll
+D:\Task Management Tool\src\TaskManagement.Api\obj\Debug\net8.0\TaskManagement.Api.sourcelink.json

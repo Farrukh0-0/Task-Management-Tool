@@ -14,5 +14,5 @@ public record TaskItemDto(
     bool IsComplete,
     string Priority,
     string? Category,
-    string OwnerId,
+    string? OwnerId,
     string? OwnerEmail);
