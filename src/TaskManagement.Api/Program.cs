@@ -104,6 +104,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 await SeedRolesAsync(app);
+await SeedAdminUserAsync(app);
 
 app.Run();
 
@@ -118,5 +119,36 @@ static async Task SeedRolesAsync(WebApplication app)
         {
             await roleManager.CreateAsync(new IdentityRole(roleName));
         }
+    }
+}
+
+static async Task SeedAdminUserAsync(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    const string adminEmail = "admin@taskmanagement.com";
+    const string adminPassword = "Admin123!";
+
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser is null)
+    {
+        adminUser = new AppUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var createResult = await userManager.CreateAsync(adminUser, adminPassword);
+        if (createResult.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+    else if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+    {
+        await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
