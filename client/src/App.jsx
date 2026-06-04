@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import TaskDashboard from './pages/TaskDashboard'
 import TaskCreation from './pages/TaskCreation'
+import UserTaskDetail from './pages/UserTaskDetail'
 import Navigation from './components/Navigation'
 import { clearAuth, getAuth, setAuth } from './services/authStorage'
 import './App.css'
@@ -36,6 +37,7 @@ function App() {
             <Route path="/register" element={<RegisterPage onAuth={handleAuth} />} />
             <Route path="/tasks" element={auth ? <TaskDashboard auth={auth} /> : <Navigate to="/login" />} />
             <Route path="/create-task" element={auth ? <TaskCreation auth={auth} /> : <Navigate to="/login" />} />
+            <Route path="/user/:userId/tasks" element={auth ? <UserTaskDetail auth={auth} /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
