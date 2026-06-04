@@ -368,49 +368,49 @@ Response (200):
 #### 1. **Login Screen**
 
 ![Login Screen](.github/images/01-login-screen.png)
-Users can log in with email and password. New users can register by clicking the "Register" link.
+- Users can log in with email and password. New users can register by clicking the "Register" link.
 
 ---
 
 #### 2. **Register Screen** 
 
 ![Registration Screen](.github/images/02-register-screen.png)
-New users can create an account by providing email, password, and display name.
+- New users can create an account by providing email, password, and display name.
 
 ---
 
 #### 3. **Admin Dashboard** 
 
 ![Admin Dashboard](.github/images/03-admin-dashboard.png)
-The admin dashboard displays the overall task management interface with quick access to create tasks.
+- The admin dashboard displays the overall task management interface with quick access to create tasks.
 
 ---
 
 #### 4. **User Progress Table** 
 
 ![User Progress Table](.github/images/04-user-progress-table.png)
-Admins can see all users and their task statistics at a glance. Click any user row to view their detailed task list.
+- Admins can see all users and their task statistics at a glance. Click any user row to view their detailed task list.
 
 ---
 
 #### 5. **User Task Detail Screen** 
 
 ![User Task Detail](.github/images/05-user-task-detail.png)
-Clicking on a user from the dashboard opens their detailed task view. Admins can edit or delete individual tasks here.
+- Clicking on a user from the dashboard opens their detailed task view. Admins can edit or delete individual tasks here.
 
 ---
 
 #### 6. **Task Creation Screen** 
 
 ![Task Creation Screen](.github/images/06-task-creation-screen.png)
-Users can create new tasks with title, description, category, priority, and due date. Admins can assign tasks to specific users.
+- Users can create new tasks with title, description, category, priority, and due date. Admins can assign tasks to specific users.
 
 ---
 
 #### 7. **Task Edit Screen** 
 
 ![Task Edit Screen](.github/images/07-task-edit-screen.png)
-Existing tasks can be edited from the user task detail screen. All fields are pre-populated with current task data.
+- Existing tasks can be edited from the user task detail screen. All fields are pre-populated with current task data.
 
 ---
 
@@ -632,12 +632,6 @@ npm run preview --prefix client
   - Services in `services/` folder
   - Use functional components and hooks
   - Keep components focused and reusable
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
