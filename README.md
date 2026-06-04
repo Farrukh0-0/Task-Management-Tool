@@ -52,7 +52,10 @@ A modern full-stack task management application built with **ASP.NET Core 8**, *
 - **Database**: SQL Server (LocalDB)
 - **ORM**: Entity Framework Core
 - **Authentication**: JWT Bearer + Identity
-- **API Documentation**: Swagger/OpenAPI
+- **SonarQube**: Code quality and security analysis
+- **Logging**: Serilog 
+- **Testing**: xUnit for unit tests 
+- **Git**: Version control with Git and GitHub
 
 ### Frontend
 - **Framework**: React 18
@@ -362,145 +365,52 @@ Response (200):
 
 ## 📸 Screenshots
 
-### Where to Add Screenshots
+#### 1. **Login Screen**
 
-Create a folder `.github/images/` in your repository root and add the following screenshots:
-
-```
-.github/images/
-├── 01-login-screen.png
-├── 02-register-screen.png
-├── 03-admin-dashboard.png
-├── 04-user-progress-table.png
-├── 05-user-task-detail.png
-├── 06-task-creation-screen.png
-└── 07-task-edit-screen.png
-```
-
-### Screenshot Descriptions & Instructions
-
-#### 1. **Login Screen** (`01-login-screen.png`)
-- **Location in README**: Under "Features" or "Getting Started"
-- **What to capture**: 
-  - Login form with email and password fields
-  - Register link
-  - Navigation bar
-
-**Markdown:**
-```markdown
-### Login Screen
 ![Login Screen](.github/images/01-login-screen.png)
 Users can log in with email and password. New users can register by clicking the "Register" link.
-```
 
 ---
 
-#### 2. **Register Screen** (`02-register-screen.png`)
-- **Location in README**: After Login Screenshot
-- **What to capture**:
-  - Registration form with email, password, display name
-  - Submit button
-  - Login link
+#### 2. **Register Screen** 
 
-**Markdown:**
-```markdown
-### Registration Screen
 ![Registration Screen](.github/images/02-register-screen.png)
 New users can create an account by providing email, password, and display name.
-```
 
 ---
 
-#### 3. **Admin Dashboard** (`03-admin-dashboard.png`)
-- **Location in README**: Under "Features" → "Admin Features"
-- **What to capture**:
-  - Dashboard header with "Task management" title
-  - "Create Task" button
-  - Admin monitoring section heading
+#### 3. **Admin Dashboard** 
 
-**Markdown:**
-```markdown
-### Admin Dashboard Overview
 ![Admin Dashboard](.github/images/03-admin-dashboard.png)
 The admin dashboard displays the overall task management interface with quick access to create tasks.
-```
 
 ---
 
-#### 4. **User Progress Table** (`04-user-progress-table.png`)
-- **Location in README**: Under "Features" → "Admin Features"
-- **What to capture**:
-  - User progress table showing:
-    - User email column
-    - Total tasks column
-    - Open tasks column
-    - Completed tasks column
-  - Multiple users in rows
-  - Table should show user rows are clickable (hover effect visible)
+#### 4. **User Progress Table** 
 
-**Markdown:**
-```markdown
-### Admin Monitoring - User Progress Table
 ![User Progress Table](.github/images/04-user-progress-table.png)
 Admins can see all users and their task statistics at a glance. Click any user row to view their detailed task list.
-```
 
 ---
 
-#### 5. **User Task Detail Screen** (`05-user-task-detail.png`)
-- **Location in README**: Under "Features" → "Admin Features"
-- **What to capture**:
-  - Back to Dashboard button
-  - "Tasks for {username}" heading
-  - Task summary (Total, Open, Completed)
-  - Task table with columns: Title, Description, Category, Priority, Due Date, Status, Actions
-  - Edit and Delete buttons
+#### 5. **User Task Detail Screen** 
 
-**Markdown:**
-```markdown
-### User Task Detail Screen
 ![User Task Detail](.github/images/05-user-task-detail.png)
 Clicking on a user from the dashboard opens their detailed task view. Admins can edit or delete individual tasks here.
-```
 
 ---
 
-#### 6. **Task Creation Screen** (`06-task-creation-screen.png`)
-- **Location in README**: Under "Features" → "User Features"
-- **What to capture**:
-  - Task creation form with fields:
-    - Title input
-    - Description textarea
-    - Category input
-    - Priority dropdown
-    - Due date picker
-    - "Assign to user" dropdown (visible only for admin)
-    - Completed checkbox
-    - Create Task button
-    - Cancel button
+#### 6. **Task Creation Screen** 
 
-**Markdown:**
-```markdown
-### Task Creation Screen
 ![Task Creation Screen](.github/images/06-task-creation-screen.png)
 Users can create new tasks with title, description, category, priority, and due date. Admins can assign tasks to specific users.
-```
 
 ---
 
-#### 7. **Task Edit Screen** (`07-task-edit-screen.png`)
-- **Location in README**: After Task Creation Screenshot
-- **What to capture**:
-  - Same form as Task Creation but with "Edit Task" as title
-  - Form pre-filled with existing task data
-  - Save changes button
+#### 7. **Task Edit Screen** 
 
-**Markdown:**
-```markdown
-### Task Edit Screen
 ![Task Edit Screen](.github/images/07-task-edit-screen.png)
 Existing tasks can be edited from the user task detail screen. All fields are pre-populated with current task data.
-```
 
 ---
 
@@ -771,3 +681,5 @@ For questions or issues:
 **Last Updated**: June 4, 2026  
 **Version**: 1.0.0
 
+## Author
+Muhammad Farrukh Iqbal
