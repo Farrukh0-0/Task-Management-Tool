@@ -89,3 +89,7 @@ export function deleteTask(id) {
 export function getUsers() {
   return request('/users')
 }
+
+export function getUserProgress() {
+  return request('/users/progress')
+}

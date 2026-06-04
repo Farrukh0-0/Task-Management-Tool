@@ -1,23 +1,14 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
-import { createTask, deleteTask, getTasks, getUsers, updateTask } from '../services/api'
-
-const emptyForm = {
-  title: '',
-  description: '',
-  dueDate: '',
-  isComplete: false,
-  priority: 'Medium',
-  category: '',
-  ownerId: '',
-}
-
-const priorities = ['Low', 'Medium', 'High']
+import { useNavigate } from 'react-router-dom'
+import { deleteTask, getTasks, getUsers, getUserProgress } from '../services/api'
 
 export default function TaskDashboard({ auth }) {
+  const navigate = useNavigate()
   const [tasks, setTasks] = useState([])
   const [users, setUsers] = useState([])
-  const [form, setForm] = useState(emptyForm)
-  const [editingId, setEditingId] = useState(null)
+  const [userProgress, setUserProgress] = useState([])
+  const [selectedUserId, setSelectedUserId] = useState('')
+  
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -25,6 +16,9 @@ export default function TaskDashboard({ auth }) {
     try {
       const result = await getTasks()
       setTasks(result)
+      if (auth.role === 'Admin') {
+        await loadUserProgress()
+      }
     } catch (err) {
       setError(err.message)
     }
@@ -43,59 +37,29 @@ export default function TaskDashboard({ auth }) {
     }
   }
 
-  useEffect(() => {
-    loadTasks()
-    loadUsers()
-  }, [])
-
-  const handleChange = (field) => (event) => {
-    const value = field === 'isComplete' ? event.target.checked : event.target.value
-    setForm((current) => ({ ...current, [field]: value }))
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError('')
-    setLoading(true)
+  const loadUserProgress = async () => {
+    if (auth.role !== 'Admin') {
+      return
+    }
 
     try {
-      const payload = {
-        title: form.title,
-        description: form.description,
-        dueDate: form.dueDate || null,
-        isComplete: form.isComplete,
-        priority: form.priority,
-        category: form.category || null,
-        ownerId: auth.role === 'Admin' ? form.ownerId : undefined,
-      }
-
-      if (editingId) {
-        await updateTask(editingId, payload)
-      } else {
-        await createTask(payload)
-      }
-
-      setForm(emptyForm)
-      setEditingId(null)
-      await loadTasks()
+      const result = await getUserProgress()
+      setUserProgress(result)
     } catch (err) {
       setError(err.message)
-    } finally {
-      setLoading(false)
     }
   }
 
+  useEffect(() => {
+    loadTasks()
+    loadUsers()
+    loadUserProgress()
+  }, [])
+
+
   const handleEdit = (task) => {
-    setEditingId(task.id)
-    setForm({
-      title: task.title || '',
-      description: task.description || '',
-      dueDate: task.dueDate ? task.dueDate.slice(0, 10) : '',
-      isComplete: task.isComplete,
-      priority: task.priority || 'Medium',
-      category: task.category || '',
-      ownerId: task.ownerId || '',
-    })
+    // navigate to creation screen with task state to edit
+    navigate('/create-task', { state: { task } })
   }
 
   const handleDelete = async (taskId) => {
@@ -103,17 +67,33 @@ export default function TaskDashboard({ auth }) {
     try {
       await deleteTask(taskId)
       await loadTasks()
+      if (auth.role === 'Admin') {
+        await loadUserProgress()
+      }
     } catch (err) {
       setError(err.message)
     }
   }
 
-  const buttonLabel = editingId ? 'Save changes' : 'Add task'
+
+  const displayedTasks = useMemo(() => {
+    if (auth.role === 'Admin' && selectedUserId) {
+      return tasks.filter((task) => task.ownerId === selectedUserId)
+    }
+    return tasks
+  }, [tasks, auth.role, selectedUserId])
+
+  const displayedUserProgress = useMemo(() => {
+    if (auth.role === 'Admin' && selectedUserId) {
+      return userProgress.filter((u) => u.id === selectedUserId)
+    }
+    return userProgress
+  }, [userProgress, auth.role, selectedUserId])
 
   const summaryText = useMemo(() => {
-    if (!tasks.length) return 'No tasks yet. Add your first task.'
-    return `Showing ${tasks.length} task${tasks.length === 1 ? '' : 's'}.`
-  }, [tasks])
+    if (!displayedTasks.length) return 'No tasks yet. Add your first task.'
+    return `Showing ${displayedTasks.length} task${displayedTasks.length === 1 ? '' : 's'}.`
+  }, [displayedTasks])
 
   return (
     <div className="page-card">
@@ -129,70 +109,52 @@ export default function TaskDashboard({ auth }) {
       </div>
 
       {error && <div className="alert">{error}</div>}
-      <form className="form-grid" onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="title">Title</label>
-          <input id="title" value={form.title} onChange={handleChange('title')} required />
-        </div>
 
-        <div className="field">
-          <label htmlFor="description">Description</label>
-          <textarea id="description" value={form.description} onChange={handleChange('description')} />
-        </div>
+      <div style={{ marginBottom: '20px' }}>
+        <button onClick={() => navigate('/create-task')} className="primary">Create Task</button>
+      </div>
 
-        <div className="field">
-          <label htmlFor="category">Category</label>
-          <input id="category" value={form.category} onChange={handleChange('category')} placeholder="e.g. Work, Personal, Bug" />
-        </div>
+      {auth.role === 'Admin' && userProgress.length > 0 && (
+        <section className="admin-panel" style={{ marginBottom: '24px' }}>
+          <h2>Admin monitoring</h2>
+          <p>Track task progress for all users and filter tasks by assignee.</p>
 
-        <div className="field">
-          <label htmlFor="priority">Priority</label>
-          <select id="priority" value={form.priority} onChange={handleChange('priority')}>
-            {priorities.map((priority) => (
-              <option key={priority} value={priority}>
-                {priority}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="field">
-          <label htmlFor="dueDate">Due date</label>
-          <input id="dueDate" type="date" value={form.dueDate} onChange={handleChange('dueDate')} />
-        </div>
-
-        {auth.role === 'Admin' && (
           <div className="field">
-            <label htmlFor="ownerId">Assign to user</label>
-            <select id="ownerId" value={form.ownerId} onChange={handleChange('ownerId')}>
-              <option value="">Select user</option>
-              {users.map((user) => (
+            <label htmlFor="selectedUserId">Show tasks for user</label>
+            <select id="selectedUserId" value={selectedUserId} onChange={(event) => setSelectedUserId(event.target.value)}>
+              <option value="">All users</option>
+              {displayedUserProgress.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.email}
                 </option>
               ))}
             </select>
           </div>
-        )}
 
-        <div className="field checkbox-field">
-          <label htmlFor="isComplete">
-            <input id="isComplete" type="checkbox" checked={form.isComplete} onChange={handleChange('isComplete')} />
-            {' '}Completed
-          </label>
-        </div>
+          <table className="task-list">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Total</th>
+                <th>Open</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedUserProgress.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.email}</td>
+                  <td>{user.totalTasks}</td>
+                  <td>{user.openTasks}</td>
+                  <td>{user.completedTasks}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
 
-        <div className="button-row">
-          <button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : buttonLabel}
-          </button>
-          {editingId && (
-            <button type="button" className="secondary" onClick={() => { setForm(emptyForm); setEditingId(null) }}>
-              Cancel
-            </button>
-          )}
-        </div>
-      </form>
+      {/* Creation moved to separate screen */}
 
       <div style={{ marginTop: '32px' }}>
         <p>{summaryText}</p>
@@ -209,7 +171,7 @@ export default function TaskDashboard({ auth }) {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {displayedTasks.map((task) => (
               <tr key={task.id}>
                 <td>{task.title}</td>
                 <td>{task.category || '-'}</td>

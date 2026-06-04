@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import TaskDashboard from './pages/TaskDashboard'
+import TaskCreation from './pages/TaskCreation'
 import Navigation from './components/Navigation'
 import { clearAuth, getAuth, setAuth } from './services/authStorage'
 import './App.css'
@@ -34,6 +35,7 @@ function App() {
             <Route path="/login" element={<LoginPage onAuth={handleAuth} />} />
             <Route path="/register" element={<RegisterPage onAuth={handleAuth} />} />
             <Route path="/tasks" element={auth ? <TaskDashboard auth={auth} /> : <Navigate to="/login" />} />
+            <Route path="/create-task" element={auth ? <TaskCreation auth={auth} /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
